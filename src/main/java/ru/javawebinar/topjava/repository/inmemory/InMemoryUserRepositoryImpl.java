@@ -5,41 +5,59 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
-
-import java.util.Collections;
+import ru.javawebinar.topjava.util.UsersUtil;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryUserRepositoryImpl implements UserRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepositoryImpl.class);
 
+    private Map<Integer, User> repository = new ConcurrentHashMap<>();
+    private AtomicInteger counter = new AtomicInteger(0);
+
+    {
+        UsersUtil.USERS.forEach(this::save);
+    }
+
     @Override
     public boolean delete(int id) {
         log.info("delete {}", id);
+        if(repository.get(id)==null) return false;
+        else {
+            repository.remove(id);
+        }
         return true;
     }
 
     @Override
     public User save(User user) {
         log.info("save {}", user);
-        return user;
+        if(user.isNew()){
+            user.setId(counter.incrementAndGet());
+            repository.put(user.getId(),user);
+        }
+        return repository.computeIfPresent(user.getId(), (id, oldMeal) -> user);
     }
 
     @Override
     public User get(int id) {
         log.info("get {}", id);
-        return null;
+        return repository.get(id);
     }
 
     @Override
     public List<User> getAll() {
         log.info("getAll");
-        return Collections.emptyList();
+        return repository.values().stream().sorted().collect(Collectors.toList());
     }
 
     @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
-        return null;
+        return repository.values().stream().filter(user -> user.getEmail().equals(email)).collect(Collectors.toList()).get(0);
     }
 }

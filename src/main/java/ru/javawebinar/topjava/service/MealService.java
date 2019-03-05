@@ -16,4 +16,6 @@ public interface MealService {
     void update(Meal meal);
 
     Collection<Meal> getAll();
+
+    Collection<Meal> getByUserId(int id);
 }

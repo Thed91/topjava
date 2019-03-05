@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 
 @Controller
@@ -45,5 +47,9 @@ public class MealRestController {
         service.update(meal);
     }
 
+    public Collection<Meal> getByUserId(int id) {
+        log.info("getByUserId");
+        return service.getByUserId(id);
+    }
 
 }

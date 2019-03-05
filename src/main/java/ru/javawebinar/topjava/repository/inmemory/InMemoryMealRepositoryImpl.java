@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryMealRepositoryImpl implements MealRepository {
@@ -43,6 +44,11 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public Collection<Meal> getAll() {
         return repository.values();
+    }
+
+    @Override
+    public Collection<Meal> getByUserId(int id) {
+        return repository.values().stream().filter(m->m.getUserId()==id).collect(Collectors.toList());
     }
 }
 

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Collection;
 
@@ -23,12 +24,12 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws NotFoundException {
         repository.delete(id);
     }
 
     @Override
-    public Meal get(int id) {
+    public Meal get(int id) throws NotFoundException {
         return repository.get(id);
     }
 
@@ -40,5 +41,10 @@ public class MealServiceImpl implements MealService {
     @Override
     public Collection<Meal> getAll() {
         return repository.getAll();
+    }
+
+    @Override
+    public Collection<Meal> getByUserId(int id) throws NotFoundException {
+        return repository.getByUserId(id);
     }
 }
