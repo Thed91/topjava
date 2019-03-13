@@ -1,9 +1,13 @@
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS meals;
 DROP TABLE IF EXISTS users;
+# DROP SEQUENCE IF EXISTS global_seq;
+
+# CREATE SEQUENCE global_seq START WITH 100000;
 
 CREATE TABLE users
 (
+  #   id               INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
   id               INTEGER PRIMARY KEY AUTO_INCREMENT,
   name             VARCHAR(64)                           NOT NULL,
   email            VARCHAR(64)                           NOT NULL,
@@ -23,6 +27,7 @@ CREATE TABLE user_roles
 );
 
 CREATE TABLE meals (
+#   id          INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
   id          INTEGER PRIMARY KEY AUTO_INCREMENT,
   user_id     INTEGER   NOT NULL,
   date_time   TIMESTAMP NOT NULL,
