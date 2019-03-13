@@ -13,6 +13,7 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import javax.persistence.PersistenceException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -27,11 +28,11 @@ import static ru.javawebinar.topjava.UserTestData.*;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class UserServiceTest {
 
-    static {
-        // Only for postgres driver logging
-        // It uses java.util.logging and logged via jul-to-slf4j bridge
-        SLF4JBridgeHandler.install();
-    }
+//    static {
+//        // Only for postgres driver logging
+//        // It uses java.util.logging and logged via jul-to-slf4j bridge
+//        SLF4JBridgeHandler.install();
+//    }
 
     @Autowired
     private UserService service;
@@ -45,7 +46,7 @@ public class UserServiceTest {
         assertMatch(service.getAll(), ADMIN, newUser, USER);
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test(expected = PersistenceException.class)
     public void duplicateMailCreate() throws Exception {
         service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
     }
